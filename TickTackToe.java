@@ -8,22 +8,104 @@ import java.util.*;
 interface Game {
 	void move();
 }
-
-class Computer implements Game{
-
-	public boolean checkchoice(int ch , char board[][]){                        // checking for empty spaces
-		if(ch == 1 && board[0][0] == '.') return true;
-		if(ch == 2 && board[0][1] == '.') return true;
-		if(ch == 3 && board[0][2] == '.') return true;
-		if(ch == 4 && board[1][0] == '.') return true;
-		if(ch == 5 && board[1][1] == '.') return true;
-		if(ch == 6 && board[1][2] == '.') return true;
-		if(ch == 7 && board[2][0] == '.') return true;
-		if(ch == 8 && board[2][1] == '.') return true;
-		if(ch == 9 && board[2][2] == '.') return true;
+class Checker{
+	public boolean checkchoice(int ch , char board[][]){
+		// checking for empty spaces
+		if(ch==1&&board[0][0]=='.')return true;
+		if(ch==2&&board[0][1]=='.')return true;
+		if(ch==3&&board[0][2]=='.')return true;
+		if(ch==4&&board[1][0]=='.')return true;
+		if(ch==5&&board[1][1]=='.')return true;
+		if(ch==6&&board[1][2]=='.')return true;
+		if(ch==7&&board[2][0]=='.')return true;
+		if(ch==8&&board[2][1]=='.')return true;
+		if(ch==9&&board[2][2]=='.')return true;
 		else return false;
-
 	}
+
+	public void Fill_Board(char board[][] , int choice  , int pos){
+		switch(pos){
+			case 1:
+
+				if(choice == 1){
+					board[0][0] = 'X';
+				}
+				else{
+					board[0][0] = 'O';
+				}
+				break;
+			case 2:
+				if(choice == 1){
+					board[0][1] = 'X';
+				}
+				else{
+					board[0][1] = 'O';
+				}
+				break;
+			case 3:
+				if(choice == 1){
+					board[0][2] = 'X';
+				}
+				else{
+					board[0][2] = 'O';
+				}
+				break;
+			case 4:
+				if(choice == 1){
+					board[1][0] = 'X';
+				}
+				else{
+					board[1][0] = 'O';
+				}
+				break;
+			case 5:
+				if(choice == 1){
+					board[1][1] = 'X';
+				}
+				else{
+					board[1][1] = 'O';
+				}
+				break;
+			case 6:
+				if(choice == 1){
+					board[1][2] = 'X';
+				}
+				else{
+					board[1][2] = 'O';
+				}
+				break;
+			case 7:
+				if(choice == 1){
+					board[2][0] = 'X';
+				}
+				else{
+					board[2][0] = 'O';
+				}
+				break;
+			case 8:
+				if(choice == 1){
+					board[2][1] = 'X';
+				}
+				else{
+					board[2][1] = 'O';
+				}
+				break;
+			case 9:
+				if(choice == 1){
+					board[2][2] = 'X';
+				}
+				else{
+					board[2][2] = 'O';
+				}
+				break;
+			default:
+				System.out.println("Wrong Choice");
+
+		}
+	}
+}
+
+class Computer extends Checker implements Game{
 	public void move(){
 
 	}
@@ -37,109 +119,13 @@ class Computer implements Game{
 
 			ch = r.nextInt((max - min) + 1) + min;
 		}
-
-		switch(ch){
-			case 1:                                  
-
-				if(choice == 1){
-					board[0][0] = 'X';
-				}
-				else{
-					board[0][0] = 'O';
-				}
-				break;
-			case 2:
-				if(choice == 1){
-					board[0][1] = 'X';
-				}
-				else{
-					board[0][1] = 'O';
-				}
-				break;
-			case 3:
-				if(choice == 1){
-					board[0][2] = 'X';
-				}
-				else{
-					board[0][2] = 'O';
-				}
-				break;
-			case 4:
-				if(choice == 1){
-					board[1][0] = 'X';
-				}
-				else{
-					board[1][0] = 'O';
-				}
-				break;
-			case 5:
-				if(choice == 1){
-					board[1][1] = 'X';
-				}
-				else{
-					board[1][1] = 'O';
-				}
-				break;
-			case 6:
-				if(choice == 1){
-					board[1][2] = 'X';
-				}
-				else{
-					board[1][2] = 'O';
-				}
-				break;
-			case 7:
-				if(choice == 1){
-					board[2][0] = 'X';
-				}
-				else{
-					board[2][0] = 'O';
-				}
-				break;
-			case 8:
-				if(choice == 1){
-					board[2][1] = 'X';
-				}
-				else{
-					board[2][1] = 'O';
-				}
-				break;
-			case 9:
-				if(choice == 1){
-					board[2][2] = 'X';
-				}
-				else{
-					board[2][2] = 'O';
-				}
-				break;
-			default:
-				System.out.println("Wrong Choice");
-
-		}
-
-
+		Fill_Board(board,choice,ch);
 	}
 }
 
-class Human implements Game{
+class Human extends Checker implements Game{
 	Scanner sc = new Scanner(System.in);
-
-
 	public void move(){
-
-	}
-
-	public boolean checkchoice(int ch , char board[][]){                            //checking for empty spaces
-		if(ch == 1 && board[0][0] == '.') return true;
-		if(ch == 2 && board[0][1] == '.') return true;
-		if(ch == 3 && board[0][2] == '.') return true;
-		if(ch == 4 && board[1][0] == '.') return true;
-		if(ch == 5 && board[1][1] == '.') return true;
-		if(ch == 6 && board[1][2] == '.') return true;
-		if(ch == 7 && board[2][0] == '.') return true;
-		if(ch == 8 && board[2][1] == '.') return true;
-		if(ch == 9 && board[2][2] == '.') return true;
-		else return false;
 
 	}
 	public void move1(char board[][] , int human){
@@ -148,84 +134,7 @@ class Human implements Game{
 			System.out.println("Position Already Filled :  Enter Again your choice");
 			ch = sc.nextInt();
 		}
-		switch(ch){
-			case 1:
-
-				if(human == 1){
-					board[0][0] = 'X';
-				}
-				else{
-					board[0][0] = 'O';
-				}
-				break;
-			case 2:
-				if(human == 1){
-					board[0][1] = 'X';
-				}
-				else{
-					board[0][1] = 'O';
-				}
-				break;
-			case 3:
-				if(human == 1){
-					board[0][2] = 'X';
-				}
-				else{
-					board[0][2] = 'O';
-				}
-				break;
-			case 4:
-				if(human == 1){
-					board[1][0] = 'X';
-				}
-				else{
-					board[1][0] = 'O';
-				}
-				break;
-			case 5:
-				if(human == 1){
-					board[1][1] = 'X';
-				}
-				else{
-					board[1][1] = 'O';
-				}
-				break;
-			case 6:
-				if(human == 1){
-					board[1][2] = 'X';
-				}
-				else{
-					board[1][2] = 'O';
-				}
-				break;
-			case 7:
-				if(human == 1){
-					board[2][0] = 'X';
-				}
-				else{
-					board[2][0] = 'O';
-				}
-				break;
-			case 8:
-				if(human == 1){
-					board[2][1] = 'X';
-				}
-				else{
-					board[2][1] = 'O';
-				}
-				break;
-			case 9:
-				if(human == 1){
-					board[2][2] = 'X';
-				}
-				else{
-					board[2][2] = 'O';
-				}
-				break;
-			default:
-				System.out.println("Wrong Choice");
-
-		}
+		Fill_Board(board,human,ch);
 	}
 }
 
