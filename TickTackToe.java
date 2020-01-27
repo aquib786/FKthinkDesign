@@ -5,7 +5,7 @@ import java.util.*;
 
 
 
-interface Game{
+interface Game {
 	void move();
 }
 
