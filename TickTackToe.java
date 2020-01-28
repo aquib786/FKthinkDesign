@@ -284,6 +284,7 @@ class TickTackToe{
 					break;
 				}
 				if(count == 9){
+					System.out.println();
 					System.out.println("Draw");
 					break;
 				}
