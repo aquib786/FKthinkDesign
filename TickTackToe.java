@@ -4,151 +4,59 @@ import java.io.*;
 import java.util.*;
 
 
+class Grid{
+	char board[][];
+	int rows, columns;
 
-interface Game {
-	void move();
+
+	Grid(int rows , int columns){
+		this.rows = rows;
+		this.columns =columns;
+		board = new char[rows][columns];
+
+		for(int i = 0 ; i < rows ; i++){
+			for(int j = 0 ; j < columns ; j++){
+				board[i][j] = '.';
+			}
+		}
+	}
+
+	public void display(){
+		for(int i = 0 ; i < rows  ; i++){
+			for(int j = 0 ; j < columns ; j++ ){
+				System.out.print(board[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
+	public void Fill_Board(int choice  , int x , int y){
+		if(choice == 1){
+			board[x][y] = 'X';
+		}
+		else{
+			board[x][y] = 'O';
+		}
+	}
 }
 class Checker{
-	public boolean checkchoice(int ch , char board[][]){
-		// checking for empty spaces
-		if(ch==1&&board[0][0]=='.')return true;
-		if(ch==2&&board[0][1]=='.')return true;
-		if(ch==3&&board[0][2]=='.')return true;
-		if(ch==4&&board[1][0]=='.')return true;
-		if(ch==5&&board[1][1]=='.')return true;
-		if(ch==6&&board[1][2]=='.')return true;
-		if(ch==7&&board[2][0]=='.')return true;
-		if(ch==8&&board[2][1]=='.')return true;
-		if(ch==9&&board[2][2]=='.')return true;
-		else return false;
+	public boolean checkchoice(int x, int y , Grid obj){
+		if(x < 0 || x >= obj.rows || y < 0 || y >= obj.columns) return false;
+		if(obj.board[x][y] == '.') return true;
+		return false;
 	}
 
-	public void Fill_Board(char board[][] , int choice  , int pos){
-		switch(pos){
-			case 1:
+	public boolean check1(char box[][], int rows  , int columns){
 
-				if(choice == 1){
-					board[0][0] = 'X';
-				}
-				else{
-					board[0][0] = 'O';
-				}
-				break;
-			case 2:
-				if(choice == 1){
-					board[0][1] = 'X';
-				}
-				else{
-					board[0][1] = 'O';
-				}
-				break;
-			case 3:
-				if(choice == 1){
-					board[0][2] = 'X';
-				}
-				else{
-					board[0][2] = 'O';
-				}
-				break;
-			case 4:
-				if(choice == 1){
-					board[1][0] = 'X';
-				}
-				else{
-					board[1][0] = 'O';
-				}
-				break;
-			case 5:
-				if(choice == 1){
-					board[1][1] = 'X';
-				}
-				else{
-					board[1][1] = 'O';
-				}
-				break;
-			case 6:
-				if(choice == 1){
-					board[1][2] = 'X';
-				}
-				else{
-					board[1][2] = 'O';
-				}
-				break;
-			case 7:
-				if(choice == 1){
-					board[2][0] = 'X';
-				}
-				else{
-					board[2][0] = 'O';
-				}
-				break;
-			case 8:
-				if(choice == 1){
-					board[2][1] = 'X';
-				}
-				else{
-					board[2][1] = 'O';
-				}
-				break;
-			case 9:
-				if(choice == 1){
-					board[2][2] = 'X';
-				}
-				else{
-					board[2][2] = 'O';
-				}
-				break;
-			default:
-				System.out.println("Wrong Choice");
 
+		char board[][] = new char[3][3];
+		int n = 3;
+		int k = 0 , m = 0;
+		for(int i = rows ; i < rows+3 ; i++ , k++ ){
+			m = 0;
+			for(int j = columns ; j < columns + 3 ; j++ , m++){
+				board[k][m] = box[i][j];
+			}
 		}
-	}
-}
-
-class Computer extends Checker implements Game{
-	public void move(){
-
-	}
-
-	public void move1(char board[][] , int choice){                              // moves of computer
-		Random r = new Random();
-		int min = 1;
-		int max = 9;
-		int ch =  r.nextInt((max - min) + 1) + min;
-		while(!checkchoice(ch , board)){
-
-			ch = r.nextInt((max - min) + 1) + min;
-		}
-		Fill_Board(board,choice,ch);
-	}
-}
-
-class Human extends Checker implements Game{
-	Scanner sc = new Scanner(System.in);
-	public void move(){
-
-	}
-	public void move1(char board[][] , int human){
-		int ch = sc.nextInt();
-		while(!checkchoice(ch , board)){
-			System.out.println("Position Already Filled :  Enter Again your choice");
-			ch = sc.nextInt();
-		}
-		Fill_Board(board,human,ch);
-	}
-}
-
-
-class TickTackToe{
-
-	Scanner sc = new Scanner(System.in);
-	int n = 3;
-	char[][] board = new char[n][n];
-
-
-
-	public boolean check(){
-
 		int countX = 0;
 		int countO = 0;
 
@@ -229,61 +137,114 @@ class TickTackToe{
 		return false;
 	}
 
-	public void display(){
-		for(int i = 0 ; i < n ; i++){
-			for(int j = 0 ; j < n ; j++ ){
-				System.out.print(board[i][j] + " ");
+
+	
+
+	public boolean check(Grid obj,int choice){
+
+		int rows = obj.rows;
+		int columns = obj.columns;
+		int dimension = rows;
+
+
+		char[][] current = obj.board;
+		int p = 0;
+		while(dimension != 1){
+
+			char[][] temp = new char[dimension/3][dimension/3];
+			int limit = dimension/3;
+			int k = 0 , m = 0;
+			for(int i = 0 ; i < dimension && k < limit ; i+=3 , k++){
+				m = 0;
+				for(int j = 0 ; j < dimension && m < limit; j += 3 , m++)
+				{
+					if(check1(current , i , j)) {
+
+					}
+					else {
+
+					}
+				}
 			}
-			System.out.println();
+
+			current = temp;
+			dimension /= 3;
+
 		}
+		return false;
+
 	}
 
-	public void displayChoice(){
-		int k = 0;
-		for(int i = 0 ; i < n ; i++){
-			for(int j = 0 ; j < n ; j++ ){
-				System.out.print(++k + " ");
+
+}
+class Human extends Checker {
+	Scanner sc = new Scanner(System.in);
+
+	public void move1(Grid obj, int human){
+		System.out.println("Enter your pos: x & y");
+		int x = sc.nextInt();
+		int y = sc.nextInt();
+		while(!checkchoice(x,y , obj)){
+			System.out.println("Not a position to fill:  Enter Again your choice");
+			x = sc.nextInt();
+			y = sc.nextInt();
+		}
+		obj.Fill_Board(human,x,y);
+	}
+}
+class Computer extends Checker {
+	public void move1(Grid obj, int choice){                              // moves of computer
+
+		for(int i = 0 ; i < obj.rows ; i++) {
+			for (int j = 0; j < obj.columns; j++) {
+				if (checkchoice(i, j, obj)) {
+					obj.Fill_Board(choice, i, j);
+					return;
+				}
 			}
-			System.out.println();
 		}
 	}
+}
 
 
 
-	public void Play(int choice) {
+class Play {
+
+	public void Play3_3(int choice, Grid obj) {
 
 		Human human = new Human();
 		Computer computer = new Computer();
+		Checker ch_obj = new Checker();
+
 		if (choice == 1) {
 			boolean Human1 = true;
 			int count = 0;
 			while (true) {
 				count++;
 				System.out.println();
-				display();
-				displayChoice();
+				obj.display();
+
 				if (Human1) {
 					System.out.println("Human1 Choice");
-					human.move1(board,1);
+					human.move1(obj, 1);
 
 					Human1 = false;
 				} else {
 					System.out.println("Human2 Choice");
-					human.move1(board,0);
+					human.move1(obj, 0);
 					Human1 = true;
 				}
-				if (check()) {
-					display();
+				if (ch_obj.check(obj,choice)) {
+					obj.display();
 					System.out.println("Game Ended");
-					if(Human1){
+					if (Human1) {
 						System.out.println("Human2 wins");
-					}
-					else{
+					} else {
 						System.out.println("Human1 wins");
 					}
 					break;
 				}
-				if(count == 9){
+				if (count == obj.rows*obj.columns) {
 					System.out.println();
 					System.out.println("Draw");
 					break;
@@ -296,23 +257,23 @@ class TickTackToe{
 			while (true) {
 				count++;
 				System.out.println();
-				display();
-				displayChoice();
+				obj.display();
+
 
 				if (Human1) {
 					System.out.println("Human Choice");
-					human.move1(board,1);
+					human.move1(obj,1);
 
 					Human1 = false;
 				} else {
 
 					System.out.println("Computer Choice ");
-					computer.move1(board , 0);
+					computer.move1(obj, 0);
 
 					Human1 = true;
 				}
-				if (check()) {
-					display();
+				if (ch_obj.check(obj,choice)) {
+					obj.display();
 					System.out.println("Game Ended");
 					if(Human1){
 						System.out.println("Computer wins");
@@ -322,31 +283,34 @@ class TickTackToe{
 					}
 					break;
 				}
-				if(count == 9){
+				if(count == obj.rows*obj.columns){
 					System.out.println("Draw");
 					break;
 				}
 			}
-		} else if (choice == 3) {
+		}
+		else if (choice == 3) {
 			boolean Comp = true;
 			int count = 0;
 			while (true) {
 				count++;
 				System.out.println();
-				display();
-				displayChoice();
+				obj.display();
+
 				if (Comp) {
-					System.out.println("Human1 Choice");
-					computer.move1(board,1);
+					System.out.println("Computer1 Choice");
+					computer.move1(obj,1);
 
 					Comp = false;
 				} else {
-					System.out.println("Human2 Choice");
-					computer.move1(board,0);
+					System.out.println("Computer2 Choice");
+					computer.move1(obj,0);
 					Comp= true;
 				}
-				if (check()) {
-					display();
+				boolean result = ch_obj.check(obj,choice);
+
+				if (result) {
+					obj.display();
 					System.out.println("Game Ended");
 					if(Comp){
 						System.out.println("Computer2 wins");
@@ -356,7 +320,8 @@ class TickTackToe{
 					}
 					break;
 				}
-				if(count == 9){
+//				System.out.println(count);
+				if(count == obj.rows*obj.columns){
 					System.out.println("Draw");
 					break;
 				}
@@ -367,20 +332,28 @@ class TickTackToe{
 				return;
 		}
 
+
 	}
+}
+class TickTackToe{
+
+	Scanner sc = new Scanner(System.in);
+
 	public static void main(String[] args) {
 
 		Scanner sc1 = new Scanner(System.in);
-		TickTackToe ttt = new TickTackToe();
+		Play p = new Play();
 
-		for(int i = 0 ; i < ttt.n ;i++){
-			for(int j = 0 ; j < ttt.n ; j++){
-				ttt.board[i][j] = '.';
-			}
-		}
+		System.out.println("Enter the size of the grid: rows and columns");
+		int rows = sc1.nextInt();
+		int columns = sc1.nextInt();
+
+		Grid box = new Grid(rows,columns);
+
+
 		System.out.println("Enter the mode\n 1. Human v/s Human \n 2. Human v/s Computer \n 3. Computer v/s Computer");
 		int ch = sc1.nextInt();
 
-		ttt.Play(ch);
+		p.Play3_3(ch , box);
 	}
 }
