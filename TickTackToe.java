@@ -138,7 +138,7 @@ class Checker{
 	}
 
 
-	
+
 
 	public boolean check(Grid obj,int choice){
 
@@ -159,10 +159,10 @@ class Checker{
 				for(int j = 0 ; j < dimension && m < limit; j += 3 , m++)
 				{
 					if(check1(current , i , j)) {
-
+						temp[k][m] = (choice == 1) ? 'X' : 'O';
 					}
 					else {
-
+						temp[k][m] = '.';
 					}
 				}
 			}
@@ -171,8 +171,8 @@ class Checker{
 			dimension /= 3;
 
 		}
+		if(current[0][0] == 'X' || current[0][0] == 'O') return true;
 		return false;
-
 	}
 
 
