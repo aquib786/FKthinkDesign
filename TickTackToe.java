@@ -6,7 +6,7 @@ import java.util.*;
 
 
 interface Game {
-	void move1(char[][] x , int y);
+	void move1(Grid x , int y);
 }
 class Grid{
 	int row;
@@ -47,7 +47,17 @@ class Grid{
 		this.board = board;
 	}
 }
+class Printer{
+	ArrayList<Grid> state = new ArrayList<>();
 
+	public void print(){
+		for(Grid iter : state){
+			iter.display();
+			System.out.println();
+		}
+	}
+
+}
 class Checker{
 
 	public boolean checkRow(Grid obj){
@@ -299,12 +309,12 @@ class Checker{
 			}
 			if(countO == n) return 'O';
 		}
-		return 'K';
+		return '_';
 	}
 
-	public boolean checkchoice(int x , int y , char[][] board){
+	public boolean checkchoice(int x , int y , Grid obj){
 
-		if(x < 0 || x >= board.length || y < 0 || y >= board.length||board[x][y] != '.')  return true;
+		if(x < 0 || x >= obj.board.length || y < 0 || y >= obj.board.length || obj.board[x][y] != '.')  return true;
 		else return false;
 
 	}
@@ -323,12 +333,12 @@ class Checker{
 }
 class Computer extends Checker implements Game{
 
-	public void move1(char board[][] , int choice){
-		Grid g = new Grid(board.length , board.length);
+	public void move1(Grid obj , int choice){
+		Grid g = new Grid(obj.board.length , obj.board.length);
 
 		int x = new Random().nextInt(g.getRow());
 		int y = new Random().nextInt(g.getColumn());
-		while( checkchoice(x,y,board) )
+		while( checkchoice(x,y,obj) )
 		{
 			x = new Random().nextInt(g.getRow());
 			y = new Random().nextInt(g.getColumn());
@@ -336,10 +346,10 @@ class Computer extends Checker implements Game{
 		}
 
 		if(choice == 1){
-			board[x][y] = 'X';
+			obj.board[x][y] = 'X';
 		}
 		else{
-			board[x][y] = 'O';
+			obj.board[x][y] = 'O';
 		}
 	}
 }
@@ -347,20 +357,20 @@ class Computer extends Checker implements Game{
 class Human extends Checker implements Game{
 	Scanner sc = new Scanner(System.in);
 
-	public void move1(char board[][], int human){
+	public void move1(Grid obj, int human){
 		int x = sc.nextInt();
 		int y = sc.nextInt();
 
-		while(checkchoice(x,y ,board)){
+		while(checkchoice(x,y ,obj)){
 			System.out.println("Position Already Filled :  Enter Again your choice");
 			x = sc.nextInt();
 			y = sc.nextInt();
 		}
 		if(human == 1){
-			board[x][y] = 'X';
+			obj.board[x][y] = 'X';
 		}
 		else{
-			board[x][y] = 'O';
+			obj.board[x][y] = 'O';
 		}
 
 	}
@@ -368,6 +378,7 @@ class Human extends Checker implements Game{
 class Play extends Checker
 {
 	Scanner sc = new Scanner(System.in);
+
 	public char play(Grid obj , int choice) {
 
 		Human human = new Human();
@@ -381,10 +392,10 @@ class Play extends Checker
 				obj.display();
 				if (check(obj)) {
 					if(Human1){
-						return 'O';
+						return 'X';
 					}
 					else{
-						return 'X';
+						return 'O';
 					}
 				}
 				if(checkFilledGrid(obj)){
@@ -393,12 +404,12 @@ class Play extends Checker
 				}
 				if (Human1) {
 					System.out.println("Human1 Choice");
-					human.move1(obj.board,1);
+					human.move1(obj,1);
 
 					Human1 = false;
 				} else {
 					System.out.println("Human2 Choice");
-					human.move1(obj.board,0);
+					human.move1(obj,0);
 					Human1 = true;
 				}
 
@@ -413,10 +424,10 @@ class Play extends Checker
 
 
 					if(Human1){
-						return 'O';
+						return 'X';
 					}
 					else{
-						return 'X';
+						return 'O';
 
 					}
 
@@ -427,13 +438,13 @@ class Play extends Checker
 				}
 				if (Human1) {
 					System.out.println("Human Choice");
-					human.move1(obj.board,1);
+					human.move1(obj,1);
 
 					Human1 = false;
 				} else {
 
 					System.out.println("Computer Choice ");
-					computer.move1(obj.board , 0);
+					computer.move1(obj , 0);
 
 					Human1 = true;
 				}
@@ -446,14 +457,14 @@ class Play extends Checker
 			while (true) {
 
 				System.out.println();
-				obj.display();
+				//obj.display();
 				if (check(obj)) {
 
 					if(Comp){
-						return 'O';
+						return 'X';
 					}
 					else{
-						return 'X';
+						return 'O';
 					}
 				}
 				if(checkFilledGrid(obj)){
@@ -463,11 +474,11 @@ class Play extends Checker
 				}
 				if (Comp) {
 					System.out.println("Computer1 Choice");
-					computer.move1(obj.board,1);
+					computer.move1(obj,1);
 					Comp = false;
 				} else {
 					System.out.println("Computer2 Choice");
-					computer.move1(obj.board,0);
+					computer.move1(obj,0);
 					Comp= true;
 				}
 
@@ -480,46 +491,50 @@ class Play extends Checker
 		}
 
 	}
-	public void PlayExtension(Grid obj , int choice){
+	public char PlayExtension(Grid obj , int choice , Printer game){
 
-		while(true){
-			int dimension = obj.board.length;
-			System.out.println(dimension);
+		int dimension = obj.board.length;
+		int size = dimension/3;
 
-			Grid new_grid = new Grid(dimension/3 , dimension/3);
-			int block_number1 = 0;
-			for(int i = 0 ; i < dimension ; i+=3 ){
-				for(int j = 0 ; j < dimension ; j += 3){
-					System.out.println("Play BLock number" + ++block_number1);
-					Grid small = new Grid(dimension/3 , dimension/3);
-					int k = 0, l = 0;
+		Grid new_grid = new Grid(3,3);
 
-					new_grid.board[i/3][j/3] = play(small , choice);
+		if(dimension > 3){
 
-					for(int row = i ; row < i+3 && k < small.board.length ; row++,k++ ){
-						l = 0;
-						for(int col = j ; col < j+3 && l < small.board.length; col++,l++){
-							obj.board[row][col] = small.board[k][l];
-						}
-					}
-					System.out.println(".......................");
-					obj.display();
-					char check_the_grid = check_return(new_grid);
-					if(check_the_grid == 'X'){
+			Grid small_grid = new Grid(dimension/3 , dimension/3);
+			int count = 0 ;
+			for(int i = 0 ; i < dimension ; i+=dimension/3 ){
+				for(int j = 0 ; j < dimension ; j += dimension/3){
 
-						System.out.println("Player1 wins");
-						return;
-
-					}
-					else if(check_the_grid=='O'){
-						System.out.println("Player2 wins");
-						return;
-					}
-
+					new_grid.board[i/size][j/size] = PlayExtension(small_grid , choice,game);
+					char ch = check_return(new_grid);
+					if(ch == 'X') return ch;
+					else if(ch == 'O') return ch;
 				}
 			}
 
-			break;
+
+		}
+		else {
+			char ch = play(new_grid , choice);
+			game.state.add(new_grid);
+			return ch;
+		}
+
+		return ';';
+	}
+	public void start_game(Grid obj , int choice){
+		Printer game = new Printer();
+		char ch = PlayExtension(obj , choice , game);
+
+		game.print();
+		if(ch == 'X'){
+			System.out.println("Player2 wins");
+		}
+		else if(ch == 'O'){
+			System.out.println("Player1 wins");
+		}
+		else{
+			System.out.println("Draw");
 		}
 	}
 }
@@ -538,6 +553,6 @@ class TickTackToe{
 		System.out.println("Enter the mode\n 1. Human v/s Human \n 2. Human v/s Computer \n 3. Computer v/s Computer");
 		int ch = sc1.nextInt();
 
-		tt.PlayExtension(obj , ch);
+		tt.start_game(obj , ch);
 	}
 }
