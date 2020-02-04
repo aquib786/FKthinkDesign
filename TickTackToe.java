@@ -49,7 +49,29 @@ class Grid{
 }
 class Printer{
 	ArrayList<Grid> state = new ArrayList<>();
+	int player1;
+	int player2;
+	int block;
+	Printer(){
+		player1 = 0;
+		player2 = 0;
+		block = 0;
 
+	}
+	void count_increment_palyer1(){
+		this.player1++;
+	}
+	void count_increment_palyer2(){
+		this.player2++;
+	}
+	void statics(){
+		System.out.println("Player1 won games of 3*3 " + this.player1);
+		System.out.println("Player2 won games of 3*3 " + this.player2);
+	}
+	void print_block(){
+		this.block++;
+		System.out.println("Currently Playing block no. " + this.block);
+	}
 	public void print(){
 		for(Grid iter : state){
 			iter.display();
@@ -360,7 +382,20 @@ class Human extends Checker implements Game{
 	public void move1(Grid obj, int human){
 		int x = sc.nextInt();
 		int y = sc.nextInt();
-
+		while(true){
+			System.out.println("Do you want to change your choice: 1.Renter  2. Continue");
+			int choice = sc.nextInt();
+			if(choice == 1){
+				x = sc.nextInt();
+				y = sc.nextInt();
+			}
+			else if(choice == 2){
+				break;
+			}
+			else{
+				System.out.println("Wrong Choice");
+			}
+		}
 		while(checkchoice(x,y ,obj)){
 			System.out.println("Position Already Filled :  Enter Again your choice");
 			x = sc.nextInt();
@@ -375,8 +410,7 @@ class Human extends Checker implements Game{
 
 	}
 }
-class Play extends Checker
-{
+class Play extends Checker {
 	Scanner sc = new Scanner(System.in);
 
 	public char play(Grid obj , int choice) {
@@ -399,7 +433,6 @@ class Play extends Checker
 					}
 				}
 				if(checkFilledGrid(obj)){
-					obj.display();
 					return '_';
 				}
 				if (Human1) {
@@ -457,7 +490,7 @@ class Play extends Checker
 			while (true) {
 
 				System.out.println();
-				//obj.display();
+				obj.display();
 				if (check(obj)) {
 
 					if(Comp){
@@ -491,7 +524,7 @@ class Play extends Checker
 		}
 
 	}
-	public char PlayExtension(Grid obj , int choice , Printer game){
+	char PlayExtension(Grid obj , int choice , Printer game){
 
 		int dimension = obj.board.length;
 		int size = dimension/3;
@@ -507,15 +540,30 @@ class Play extends Checker
 
 					new_grid.board[i/size][j/size] = PlayExtension(small_grid , choice,game);
 					char ch = check_return(new_grid);
-					if(ch == 'X') return ch;
-					else if(ch == 'O') return ch;
+					if(ch == 'X'){
+
+						return ch;
+					}
+					else if(ch == 'O'){
+
+						return ch;
+					}
 				}
 			}
 
 
 		}
 		else {
+			game.print_block();
 			char ch = play(new_grid , choice);
+			if(ch == 'X'){
+				game.count_increment_palyer2();
+				return ch;
+			}
+			else if(ch == 'O'){
+				game.count_increment_palyer1();
+				return ch;
+			}
 			game.state.add(new_grid);
 			return ch;
 		}
@@ -525,8 +573,7 @@ class Play extends Checker
 	public void start_game(Grid obj , int choice){
 		Printer game = new Printer();
 		char ch = PlayExtension(obj , choice , game);
-
-		game.print();
+		game.statics();
 		if(ch == 'X'){
 			System.out.println("Player2 wins");
 		}
